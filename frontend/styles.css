@@ -1,0 +1,30 @@
+.brand-tag{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 1rem;
+    font-size: 2.5rem;
+}
+
+
+.card{
+    height:auto;
+}
+
+.card-title{
+    font-size:2rem;
+}
+
+#longurl{
+    margin-top:0.5rem;
+    height: 3rem; 
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+#shorten-btn{
+    width:100%;
+}
+
+#placeholder-shorturl{
+    color:#2596be;
+    font-size: 2rem;
+}
