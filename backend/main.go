@@ -9,12 +9,9 @@ import (
 	"database/sql"
 	"github.com/joho/godotenv"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	_"github.com/lib/pq"
 )
-
-
-
-
 
 func convertToBase62(counter int64) string {
 	if counter == 0 {
@@ -71,6 +68,12 @@ func main() {
 
 	
 	var app *fiber.App = fiber.New()
+	app.Use(cors.New(cors.Config{
+        AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
+        AllowOrigins:     "*",
+        AllowCredentials: true,
+        AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+    }))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		fmt.Println(convertToBase62(counter))
@@ -90,6 +93,8 @@ func main() {
 	}
 
 	//DB : urlshortenerdb TABLE: urlmapping
+
+	//TODO: Check if user given URL is valid before shortening.
 	app.Post("/shorten/", func(c *fiber.Ctx) error {
 		url := new(URL)
 		if err := c.BodyParser(url); err != nil {
@@ -123,7 +128,7 @@ func main() {
 		switch err := row.Scan(&longURL); err{
 		case sql.ErrNoRows:
 			//FIXME: Add 404 not found page at the error URL
-			return c.Redirect("http://localhost:3000/error")
+			return c.SendString("Sorry Unable to process your request");
 		case nil:
 			return c.Redirect(longURL)
 		default:
